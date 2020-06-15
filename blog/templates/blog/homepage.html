@@ -1,0 +1,9 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Filmbase{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+        <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+    {% endfor %}
+{% endblock %}

@@ -3,6 +3,7 @@ from django.db import models
 class Person(models.Model):
     name = models.CharField(null=False, blank=False, max_length=100)
     date_of_birth = models.DateField(null=False, blank=False)
+    #avatar = models.ImageField()
 
 class Movie(models.Model):
     title = models.CharField(null=False, blank=False, max_length=100)
