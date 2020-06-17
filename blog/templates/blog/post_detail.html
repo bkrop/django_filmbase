@@ -9,8 +9,16 @@
     <small>Autor: {{ post.author }} / {{ post.date_of_create }}</small>
     <p>{{ post.content }}</p>
 
+    <h3>Komentarze:</h3>
     {% for comment in post.comment_set.all %}
         <p>{{ comment.content }}</p>
         <small>{{ comment.author }} / {{ comment.date_of_create }}</small>
     {% endfor %}
+
+    <h3>Dodaj komentarz:</h3>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Wyślij</button>
+    </form>
 {% endblock %}
