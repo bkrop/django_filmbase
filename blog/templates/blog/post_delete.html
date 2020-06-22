@@ -7,6 +7,6 @@
         {% csrf_token %}
         <h2>Czy na pewno chcesz usunąć post "{{ post.title }}"?</h2>
         <button type="submit">Tak</button>
-        <a href="{% url 'post_detail' pk=post.pk %}">Nie, wróć do posta</a>
+        <a href="{% url 'post_detail' slug=post.slug %}">Nie, wróć do posta</a>
     </form>
 {% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'users/base.html' %}
+
+{% block title %}{{ person.full_name }}{% endblock %}
+
+{% block content %}
+    <h2>{{ person.full_name }}</h2>
+    <p>{{ person.date_of_birth }}</p>
+    <p>Ocena: {{ person.get_average }}</p>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Oceń</button>
+    </form>
+{% endblock %}

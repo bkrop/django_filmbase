@@ -47,7 +47,7 @@ class PostDetailView(FormMixin, DetailView):
         return super(PostDetailView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('post_detail', kwargs={'pk': self.object.pk})
+        return reverse('post_detail', kwargs={'slug': self.object.slug})
 
 class PostDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     model = Post
