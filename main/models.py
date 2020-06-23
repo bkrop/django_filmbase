@@ -12,13 +12,19 @@ class Person(models.Model):
     
     def get_average(self):
         rates = self.rate_set.all().values_list('choice', flat=True)
-        average = (sum(rates))/len(rates)
-        return average
+        if rates:
+            average = (sum(rates))/len(rates)
+            return average
+        return "Brak oceny"
 
     def __str__(self):
         return f"{self.full_name}"
 
 class Rate(models.Model):
+
+    class Meta:
+        unique_together = (('sender', 'person'),)
+
     choice = models.IntegerField(null=False, blank=False, choices=RATE_CHOICES)
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)

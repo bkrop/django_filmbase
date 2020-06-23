@@ -1,5 +1,5 @@
-from main.models import Person
-from django.shortcuts import render
+from main.models import Person, Rate
+from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, DetailView
 from .forms import RateForm
 from django.views.generic.edit import FormMixin
@@ -30,10 +30,12 @@ class PersonDetailView(FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        form.instance.sender = self.request.user
-        form.instance.person = self.get_object()
-        form.save()
-        return super(PersonDetailView, self).form_valid(form)
+        Rate.objects.update_or_create(
+            sender=self.request.user, 
+            person=self.object,
+            defaults={'choice': form.cleaned_data['choice']}
+        )
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('detail_person', kwargs={'slug': self.object.slug})
