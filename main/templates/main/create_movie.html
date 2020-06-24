@@ -1,0 +1,11 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Stwórz film{% endblock %}
+
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Stwórz</button>
+    </form>
+{% endblock %}

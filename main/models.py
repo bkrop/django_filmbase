@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from .utils import unique_slug_generator
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 RATE_CHOICES = [(i, i) for i in range(1, 11)]
 
@@ -20,14 +21,8 @@ class Person(models.Model):
     def __str__(self):
         return f"{self.full_name}"
 
-class Rate(models.Model):
-
-    class Meta:
-        unique_together = (('sender', 'person'),)
-
-    choice = models.IntegerField(null=False, blank=False, choices=RATE_CHOICES)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
+    def get_absolute_url(self):
+        return reverse('detail_person', kwargs={'slug': self.slug })
 
 class Movie(models.Model):
     title = models.CharField(null=False, blank=False, max_length=100, verbose_name='Tytuł')
@@ -42,9 +37,29 @@ class Movie(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+    def get_average(self):
+        rates = self.rate_set.all().values_list('choice', flat=True)
+        if rates:
+            average = (sum(rates))/len(rates)
+            return average
+        return "Brak oceny"
+
+    def get_absolute_url(self):
+        return reverse('detail_movie', kwargs={'slug': self.slug })
+
 def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
 pre_save.connect(slug_generator, sender=Person)
 pre_save.connect(slug_generator, sender=Movie)
+
+class Rate(models.Model):
+
+    class Meta:
+        unique_together = (('sender', 'person'), ('sender', 'movie'),)
+
+    choice = models.IntegerField(null=False, blank=False, choices=RATE_CHOICES)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, null=True)

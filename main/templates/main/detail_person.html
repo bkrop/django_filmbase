@@ -9,6 +9,9 @@
 
     <form action="" method="POST">
         {% csrf_token %}
+        {% if my_rate %}
+            <p>Twoja ocena: {{ my_rate.choice }}</p>
+        {% endif %}
         {{ form.as_p }}
         <button type="submit">Oceń</button>
     </form>

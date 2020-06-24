@@ -1,0 +1,32 @@
+{% extends 'users/base.html' %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ movie.title }}</h2>
+    <p>{{ movie.description }}</p>
+    <p>{{ movie.date_of_realease }}</p>
+    <p>{{ movie.kind }}</p>
+    <p>Ocena: {{ movie.get_average }}</p>
+    <h3>Reżyseria</h3>
+    {% for director in movie.directors.all %}
+        <ul>{{ director }}</ul>
+    {% endfor %}
+    <h3>Scenariusz</h3>
+    {% for scenarist in movie.scenarists.all %}
+        <ul>{{ scenarist }}</ul>
+    {% endfor %}
+    <h3>Obsada</h3>
+    {% for actor in movie.actors.all %}
+        <ul>{{ actor }}</ul>
+    {% endfor %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% if my_rate %}
+            <p>Twoja ocena: {{ my_rate.choice }}</p>
+        {% endif %}
+        {{ form.as_p }}
+        <button type="submit">Oceń</button>
+    </form>
+{% endblock %}
