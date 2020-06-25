@@ -55,7 +55,6 @@ pre_save.connect(slug_generator, sender=Person)
 pre_save.connect(slug_generator, sender=Movie)
 
 class Rate(models.Model):
-
     class Meta:
         unique_together = (('sender', 'person'), ('sender', 'movie'),)
 
