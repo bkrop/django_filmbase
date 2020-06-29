@@ -31,4 +31,8 @@
     </form>
 
     <p><a href="{% url 'create_topic' slug=movie.slug %}">Stwórz temat</a></p>
+
+    {% for topic in movie.topic_set.all %}
+        <a href="{% url 'detail_topic' slug=movie.slug topic_slug=topic.slug %}">{{ topic.title }}</a><p></p>
+    {% endfor %}
 {% endblock %}
