@@ -4,6 +4,7 @@ from blog.models import Post
 from main.models import Person, Movie
 from .utils import unique_slug_generator
 from django.db.models.signals import pre_save
+from django.urls import reverse
 
 class Topic(models.Model):
     title = models.CharField(verbose_name='Tytuł', null=False, blank=False, max_length=250)

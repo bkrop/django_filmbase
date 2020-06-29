@@ -15,4 +15,10 @@
         {{ form.as_p }}
         <button type="submit">Oceń</button>
     </form>
+
+    <p><a href="{% url 'create_topic' slug=person.slug %}">Stwórz temat</a></p>
+
+    {% for topic in person.topic_set.all %}
+        <a href="{% url 'detail_topic' slug=person.slug topic_slug=topic.slug %}">{{ topic.title }}</a><p></p>
+    {% endfor %}
 {% endblock %}

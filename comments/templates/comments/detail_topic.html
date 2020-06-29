@@ -6,4 +6,9 @@
     <h2>{{ topic.title }}</h2>
     <small>{{ topic.author }}</small>
     <p>{{ topic.content }}</p>
+    {% if topic.movie %}
+        <small><a href="{% url 'detail_movie' slug=topic.movie.slug %}">Strona filmu</a></small>
+    {% elif topic.person %}
+        <small><a href="{% url 'detail_person' slug=topic.person.slug %}">Strona osoby</a></small>
+    {% endif %}
 {% endblock %}
