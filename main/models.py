@@ -24,6 +24,9 @@ class Person(models.Model):
     def get_absolute_url(self):
         return reverse('detail_person', kwargs={'slug': self.slug })
 
+    def get_class(self):
+        return self.__class__.__name__
+
 class Movie(models.Model):
     title = models.CharField(null=False, blank=False, max_length=100, verbose_name='Tytuł')
     description = models.CharField(null=False, blank=False, max_length=400, verbose_name='Opis')
@@ -46,6 +49,9 @@ class Movie(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail_movie', kwargs={'slug': self.slug })
+
+    def get_class(self):
+        return self.__class__.__name__
 
 def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:

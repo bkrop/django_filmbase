@@ -18,6 +18,9 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+    def get_class(self):
+        return self.__class__.__name__
+
 def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)

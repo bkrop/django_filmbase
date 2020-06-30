@@ -4,6 +4,12 @@
 
 {% block content %}
     {% for result in results %}
-        <p>{{ result }}</p>
-    {% endfor%}
+        {% if result.get_class == 'Person' %}
+            <p><a href="{% url 'detail_person' slug=result.slug %}">{{ result }}</a></p>
+        {% elif result.get_class == 'Movie' %}
+            <p><a href="{% url 'detail_movie' slug=result.slug %}">{{ result }}</a></p>
+        {% else %}
+            <p><a href="{% url 'post_detail' slug=result.slug %}">{{ result }}</a></p>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
