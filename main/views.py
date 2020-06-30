@@ -4,6 +4,10 @@ from django.views.generic import CreateView, DetailView
 from .forms import RateForm
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
+from blog.models import Post
+from itertools import chain
+from django.shortcuts import render
+from django.db.models import Q
 
 class PersonCreateView(CreateView):
     model = Person
@@ -80,3 +84,14 @@ class MovieDetailView(FormMixin, DetailView):
 
     def get_success_url(self):
         return reverse('detail_movie', kwargs={'slug': self.object.slug})
+
+def search(request):
+    query = request.GET.get('search')
+    people = Person.objects.filter(Q(full_name__contains=query))
+    movies = Movie.objects.filter(Q(title__contains=query))
+    posts = Post.objects.filter(Q(title__contains=query))
+    results = chain(people, movies, posts)
+    context = {
+        'results': results
+    }
+    return render(request, 'main/results.html', context=context)

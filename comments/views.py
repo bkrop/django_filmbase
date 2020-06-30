@@ -1,10 +1,9 @@
-from comments.models import Comment
-from django.shortcuts import render
 from django.views.generic import CreateView, DetailView
-from .models import Comment, Topic
+from .models import Topic
 from django.shortcuts import reverse
 from main.models import Person, Movie
 from django.db.models import Q
+
 
 class TopicCreateView(CreateView):
     model = Topic
@@ -41,3 +40,5 @@ class TopicDetailView(DetailView):
             Q(person__slug=self.kwargs['slug'])
         ).filter(slug=self.kwargs['topic_slug']).first()
         return topic
+
+

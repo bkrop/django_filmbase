@@ -1,0 +1,9 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Wyniki wyszukiwania{% endblock %}
+
+{% block content %}
+    {% for result in results %}
+        <p>{{ result }}</p>
+    {% endfor%}
+{% endblock %}
