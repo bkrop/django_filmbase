@@ -10,15 +10,15 @@
     <p>Ocena: {{ movie.get_average }}</p>
     <h3>Reżyseria</h3>
     {% for director in movie.directors.all %}
-        <ul>{{ director }}</ul>
+        <a href="{% url 'detail_person' slug=director.slug %}"><ul>{{ director }}</ul></a>
     {% endfor %}
     <h3>Scenariusz</h3>
     {% for scenarist in movie.scenarists.all %}
-        <ul>{{ scenarist }}</ul>
+        <a href="{% url 'detail_person' slug=scenarist.slug %}"><ul>{{ scenarist }}</ul></a>
     {% endfor %}
     <h3>Obsada</h3>
     {% for actor in movie.actors.all %}
-        <ul>{{ actor }}</ul>
+        <a href="{% url 'detail_person' slug=actor.slug %}"><ul>{{ actor }}</ul></a>
     {% endfor %}
 
     <form action="" method="POST">

@@ -16,6 +16,19 @@
         <button type="submit">Oceń</button>
     </form>
 
+    <h2>Aktor</h2>
+    {% for movie in person.Starred_in.all %}
+        <ul><a href="{% url 'detail_movie' slug=movie.slug %}">{{ movie.title }}</a></ul>
+    {% endfor %}
+    <h2>Reżyser</h2>
+    {% for movie in person.Directed.all %}
+        <ul><a href="{% url 'detail_movie' slug=movie.slug %}">{{ movie.title }}</a></ul>
+    {% endfor %}
+    <h2>Scenarzysta</h2>
+    {% for movie in person.Wrote_the_script.all %}
+        <ul><a href="{% url 'detail_movie' slug=movie.slug %}">{{ movie.title }}</a></ul>
+    {% endfor %}
+
     <p><a href="{% url 'create_topic' slug=person.slug %}">Stwórz temat</a></p>
 
     {% for topic in person.topic_set.all %}

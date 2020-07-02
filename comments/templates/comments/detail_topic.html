@@ -11,4 +11,17 @@
     {% elif topic.person %}
         <small><a href="{% url 'detail_person' slug=topic.person.slug %}">Strona osoby</a></small>
     {% endif %}
+
+    <h3>Dodaj komentarz:</h3>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Wyślij</button>
+    </form>
+
+    <h3>Komentarze:</h3>
+    {% for comment in topic.comment_set.all %}
+        <p>{{ comment.content }}</p>
+        <small>{{ comment.author }} / {{ comment.date_of_create }}</small>
+    {% endfor %}
 {% endblock %}

@@ -18,7 +18,7 @@ class Topic(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField(blank=False, null=False, max_length=500)
+    content = models.TextField(blank=False, null=False, max_length=500, verbose_name='Treść')
     date_of_create = models.DateField(auto_now=True, blank=False, null=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True)
