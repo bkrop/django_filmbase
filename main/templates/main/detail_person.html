@@ -5,6 +5,7 @@
 {% block content %}
     <h2>{{ person.full_name }}</h2>
     <p>{{ person.date_of_birth }}</p>
+    <img src="{{ person.avatar.url }}" alt="" width="125" height="125">
     <p>Ocena: {{ person.get_average }}</p>
 
     <form action="" method="POST">

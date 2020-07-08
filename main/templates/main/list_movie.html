@@ -1,0 +1,10 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Ranking filmów{% endblock %}
+
+{% block content %}
+    {% for movie in movies %}
+        <h2><a href="{% url 'detail_movie' slug=movie.slug %}">{{ movie.title }}</a></h2>
+        <small>{{ movie.get_average }}</small>
+    {% endfor %}
+{% endblock %}

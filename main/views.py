@@ -1,6 +1,6 @@
 from main.models import Person, Rate, Movie
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
 from .forms import RateForm
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
@@ -8,10 +8,12 @@ from blog.models import Post
 from itertools import chain
 from django.shortcuts import render
 from django.db.models import Q
+from django.db.models import Avg
+from .forms import PersonForm
 
 class PersonCreateView(CreateView):
     model = Person
-    fields = '__all__'
+    form_class = PersonForm
     template_name = 'main/create_person.html'
 
 class PersonDetailView(FormMixin, DetailView):
@@ -51,6 +53,15 @@ class MovieCreateView(CreateView):
     model = Movie
     fields = '__all__'
     template_name = 'main/create_movie.html'
+
+class MovieListView(ListView):
+    model = Movie
+    template_name = 'main/list_movie.html'
+    context_object_name = 'movies'
+
+    def get_queryset(self):
+        qs = Movie.objects.annotate(average_stars = Avg('rate__choice')).order_by('-average_stars')
+        return qs
 
 class MovieDetailView(FormMixin, DetailView):
     model = Movie

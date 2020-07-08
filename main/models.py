@@ -10,6 +10,7 @@ class Person(models.Model):
     full_name = models.CharField(null=False, blank=False, max_length=100)
     date_of_birth = models.DateField(null=False, blank=False)
     slug = models.SlugField(null=True, blank=True)
+    avatar = models.ImageField(default='default.jpg', null=True, blank=True)
     
     def get_average(self):
         rates = self.rate_set.all().values_list('choice', flat=True)

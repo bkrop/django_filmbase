@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, RedirectView
 from .models import Topic
 from django.shortcuts import reverse
 from main.models import Person, Movie
