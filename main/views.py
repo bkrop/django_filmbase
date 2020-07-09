@@ -1,6 +1,7 @@
 from main.models import Person, Rate, Movie
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import RateForm
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
@@ -11,10 +12,25 @@ from django.db.models import Q
 from django.db.models import Avg
 from .forms import PersonForm
 
-class PersonCreateView(CreateView):
+class PersonCreateView(LoginRequiredMixin, CreateView):
     model = Person
     form_class = PersonForm
     template_name = 'main/create_person.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PersonCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Stwórz osobę'
+        return context
+
+class PersonUpdateView(LoginRequiredMixin, UpdateView):
+    model = Person
+    form_class = PersonForm
+    template_name = 'main/create_person.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PersonUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Edytuj osobę'
+        return context
 
 class PersonDetailView(FormMixin, DetailView):
     model = Person
@@ -25,9 +41,10 @@ class PersonDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(PersonDetailView, self).get_context_data(**kwargs)
         context['form'] = RateForm(initial={'person': self.object})
-        context['my_rate'] = Rate.objects.filter(
-                sender=self.request.user,
-                person=self.get_object()).first()
+        if self.request.user.is_authenticated:
+            context['my_rate'] = Rate.objects.filter(
+                    sender=self.request.user,
+                    person=self.get_object()).first()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -49,10 +66,25 @@ class PersonDetailView(FormMixin, DetailView):
     def get_success_url(self):
         return reverse('detail_person', kwargs={'slug': self.object.slug})
 
-class MovieCreateView(CreateView):
+class MovieCreateView(LoginRequiredMixin, CreateView):
     model = Movie
-    fields = '__all__'
+    fields = ['title', 'description', 'date_of_realease', 'kind', 'actors', 'directors', 'scenarists']
     template_name = 'main/create_movie.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MovieCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Stwórz film'
+        return context
+
+class MovieUpdateView(LoginRequiredMixin, UpdateView):
+    model = Movie
+    fields = ['title', 'description', 'date_of_realease', 'kind', 'actors', 'directors', 'scenarists']
+    template_name = 'main/create_movie.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MovieUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Edytuj film'
+        return context
 
 class MovieListView(ListView):
     model = Movie

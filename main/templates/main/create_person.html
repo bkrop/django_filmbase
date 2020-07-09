@@ -1,11 +1,15 @@
 {% extends 'users/base.html' %}
 
-{% block title %}Stwórz osobę{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Stwórz</button>
+        {% if object %}
+            <button type="submit">Zmień</button>
+        {% else %}
+            <button type="submit">Stwórz</button>
+        {% endif %}
     </form>
 {% endblock %}
