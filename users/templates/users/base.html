@@ -1,3 +1,4 @@
+{% load static %}
 <html>
     <head>
         <title>{% block title %}{% endblock %}</title>
@@ -7,6 +8,8 @@
             <ul><a href="{% url 'home' %}">FILMBASE</a></ul>
             {% if user.is_authenticated %}
                 <ul><a href="{% url 'logout' %}">Wyloguj się</a></ul>
+                <ul><a href="{% url 'create_person' %}">Stwórz osobę</a></ul>
+                <ul><a href="{% url 'create_movie' %}">Stwórz film</a></ul>
             {% else %}
                 <ul><a href="{% url 'register' %}">Zarejestruj się</a></ul>
                 <ul><a href="{% url 'login' %}">Zaloguj się</a></ul>
@@ -19,5 +22,7 @@
         </div>
         {% block content %}
         {% endblock %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{% static 'js/rate.js' %}"></script>
     </body>
 </html>

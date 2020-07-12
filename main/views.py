@@ -1,8 +1,7 @@
 from main.models import Person, Rate, Movie
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import RateForm
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
 from blog.models import Post
@@ -10,7 +9,8 @@ from itertools import chain
 from django.shortcuts import render
 from django.db.models import Q
 from django.db.models import Avg
-from .forms import PersonForm
+from .forms import PersonForm, MovieForm, RateForm
+from django.forms.models import model_to_dict
 
 class PersonCreateView(LoginRequiredMixin, CreateView):
     model = Person
@@ -68,8 +68,8 @@ class PersonDetailView(FormMixin, DetailView):
 
 class MovieCreateView(LoginRequiredMixin, CreateView):
     model = Movie
-    fields = ['title', 'description', 'date_of_realease', 'kind', 'actors', 'directors', 'scenarists']
     template_name = 'main/create_movie.html'
+    form_class = MovieForm
 
     def get_context_data(self, **kwargs):
         context = super(MovieCreateView, self).get_context_data(**kwargs)
@@ -112,18 +112,25 @@ class MovieDetailView(FormMixin, DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
+        if request.method == 'POST':
+            if form.is_valid():
+                new_rate, _ = Rate.objects.update_or_create(
+                sender=self.request.user, 
+                movie=self.object,
+                defaults={'choice': form.cleaned_data['choice']}
+            )
+                return JsonResponse({'rate': model_to_dict(new_rate)}, status=200)
         else:
             return self.form_invalid(form)
 
-    def form_valid(self, form):
-        Rate.objects.update_or_create(
-            sender=self.request.user, 
-            movie=self.object,
-            defaults={'choice': form.cleaned_data['choice']}
-        )
-        return HttpResponseRedirect(self.get_success_url())
+    # def form_valid(self, form):
+    #     new_rate = Rate.objects.update_or_create(
+    #         sender=self.request.user, 
+    #         movie=self.object,
+    #         defaults={'choice': form.cleaned_data['choice']}
+    #     )
+    #     #return HttpResponseRedirect(self.get_success_url())
+    #     return JsonResponse({'rate': model_to_dict(new_rate)}, status=200)
 
     def get_success_url(self):
         return reverse('detail_movie', kwargs={'slug': self.object.slug})

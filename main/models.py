@@ -11,6 +11,7 @@ class Person(models.Model):
     date_of_birth = models.DateField(null=False, blank=False)
     slug = models.SlugField(null=True, blank=True)
     avatar = models.ImageField(default='default.jpg', null=True, blank=True)
+    is_accepted = models.BooleanField(default=False)
     
     def get_average(self):
         rates = self.rate_set.all().values_list('choice', flat=True)
@@ -37,6 +38,7 @@ class Movie(models.Model):
     directors = models.ManyToManyField(Person, related_name='Directed')
     scenarists = models.ManyToManyField(Person, related_name='Wrote_the_script')
     slug = models.SlugField(null=True, blank=True)
+    is_accepted = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.title}'
