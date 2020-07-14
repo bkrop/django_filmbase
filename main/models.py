@@ -67,7 +67,8 @@ class Rate(models.Model):
     class Meta:
         unique_together = (('sender', 'person'), ('sender', 'movie'),)
 
-    choice = models.IntegerField(null=False, blank=False, choices=RATE_CHOICES)
+    choice = models.IntegerField(null=False, blank=False, choices=RATE_CHOICES,
+                                verbose_name='Twoja ocena')
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, null=True)

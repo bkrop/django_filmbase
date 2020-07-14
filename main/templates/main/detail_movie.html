@@ -23,11 +23,6 @@
 
     <form action="" method="POST" id="rateForm" data-url="{% url 'detail_movie' slug=movie.slug %}">
         {% csrf_token %}
-        {% if my_rate %}
-            <div id="myRate">
-                <p>Twoja ocena: {{ my_rate.choice }}</p>
-            </div>            
-        {% endif %}
         {{ form.as_p }}
         <button type="button" id="rateButton">Oceń</button>
     </form>

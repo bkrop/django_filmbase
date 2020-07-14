@@ -103,10 +103,12 @@ class MovieDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(MovieDetailView, self).get_context_data(**kwargs)
-        context['form'] = RateForm(initial={'movie': self.object})
-        context['my_rate'] = Rate.objects.filter(
-                sender=self.request.user,
-                movie=self.get_object()).first()
+        if Rate.objects.filter(movie=self.object, sender=self.request.user).exists():
+            context['form'] = RateForm(
+            initial={
+            'movie': self.object,
+            'choice': Rate.objects.filter(movie=self.object, sender=self.request.user).first().choice
+            })
         return context
 
     def post(self, request, *args, **kwargs):
@@ -123,17 +125,8 @@ class MovieDetailView(FormMixin, DetailView):
         else:
             return self.form_invalid(form)
 
-    # def form_valid(self, form):
-    #     new_rate = Rate.objects.update_or_create(
-    #         sender=self.request.user, 
-    #         movie=self.object,
-    #         defaults={'choice': form.cleaned_data['choice']}
-    #     )
-    #     #return HttpResponseRedirect(self.get_success_url())
-    #     return JsonResponse({'rate': model_to_dict(new_rate)}, status=200)
-
     def get_success_url(self):
-        return reverse('detail_movie', kwargs={'slug': self.object.slug})
+        return reverse('detail_movie', kwargs={'slug': self.object.slug})        
 
 def search(request):
     query = request.GET.get('search')
