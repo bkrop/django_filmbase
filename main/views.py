@@ -40,28 +40,26 @@ class PersonDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PersonDetailView, self).get_context_data(**kwargs)
-        context['form'] = RateForm(initial={'person': self.object})
-        if self.request.user.is_authenticated:
-            context['my_rate'] = Rate.objects.filter(
-                    sender=self.request.user,
-                    person=self.get_object()).first()
+        if self.request.user.is_authenticated and Rate.objects.filter(person=self.object, sender=self.request.user).exists():
+            context['form'] = RateForm(
+            initial={
+            'person': self.object,
+            'choice': Rate.objects.filter(person=self.object, sender=self.request.user).first().choice })
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
+        if request.method == 'POST':
+            if form.is_valid():
+                new_rate, _ = Rate.objects.update_or_create(
+                sender=self.request.user, 
+                person=self.object,
+                defaults={'choice': form.cleaned_data['choice']}
+            )
+                return JsonResponse({'rate': model_to_dict(new_rate)}, status=200)
         else:
             return self.form_invalid(form)
-
-    def form_valid(self, form):
-        Rate.objects.update_or_create(
-            sender=self.request.user, 
-            person=self.object,
-            defaults={'choice': form.cleaned_data['choice']}
-        )
-        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('detail_person', kwargs={'slug': self.object.slug})
@@ -103,7 +101,7 @@ class MovieDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(MovieDetailView, self).get_context_data(**kwargs)
-        if Rate.objects.filter(movie=self.object, sender=self.request.user).exists():
+        if self.request.user.is_authenticated and Rate.objects.filter(movie=self.object, sender=self.request.user).exists():
             context['form'] = RateForm(
             initial={
             'movie': self.object,

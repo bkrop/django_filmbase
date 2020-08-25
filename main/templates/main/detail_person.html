@@ -8,14 +8,13 @@
     <img src="{{ person.avatar.url }}" alt="" width="125" height="125">
     <p>Ocena: {{ person.get_average }}</p>
 
-    <form action="" method="POST">
-        {% csrf_token %}
-        {% if my_rate %}
-            <p>Twoja ocena: {{ my_rate.choice }}</p>
-        {% endif %}
-        {{ form.as_p }}
-        <button type="submit">Oceń</button>
-    </form>
+    {% if user.is_authenticated %}
+        <form action="" method="POST" id="rateForm" data-url="{% url 'detail_person' slug=person.slug %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="button" id="rateButton">Oceń</button>
+        </form>
+    {% endif %}
 
     <h2>Aktor</h2>
     {% for movie in person.Starred_in.all %}

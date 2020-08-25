@@ -7,7 +7,16 @@
     <p>{{ movie.description }}</p>
     <p>{{ movie.date_of_realease }}</p>
     <p>{{ movie.kind }}</p>
-    <p>Ocena: {{ movie.get_average }}</p>
+    <p>Ocena: <div id="average">{{ movie.get_average }}</div></p>
+    
+    {% if user.is_authenticated %}
+        <form action="" method="POST" id="rateForm" data-url="{% url 'detail_movie' slug=movie.slug %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="button" id="rateButton">Oceń</button>
+        </form>
+    {% endif %}
+
     <h3>Reżyseria</h3>
     {% for director in movie.directors.all %}
         <a href="{% url 'detail_person' slug=director.slug %}"><ul>{{ director }}</ul></a>
@@ -20,12 +29,6 @@
     {% for actor in movie.actors.all %}
         <a href="{% url 'detail_person' slug=actor.slug %}"><ul>{{ actor }}</ul></a>
     {% endfor %}
-
-    <form action="" method="POST" id="rateForm" data-url="{% url 'detail_movie' slug=movie.slug %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="button" id="rateButton">Oceń</button>
-    </form>
 
     <p><a href="{% url 'create_topic' slug=movie.slug %}">Stwórz temat</a></p>
 

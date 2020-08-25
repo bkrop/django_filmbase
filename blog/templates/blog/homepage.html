@@ -4,7 +4,9 @@
 
 {% block content %}
     {% for post in posts %}
-        <h1><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h1>
-        <small>{{ post.author }} / {{ post.date_of_create }}</small>
+        <div class="container-fluid">
+            <h1><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h1>
+            <small>{{ post.author }} / {{ post.date_of_create }}</small>
+        </div>        
     {% endfor %}
 {% endblock %}

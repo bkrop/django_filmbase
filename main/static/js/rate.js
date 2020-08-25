@@ -5,9 +5,9 @@ $(document).ready(function(){
             url: $("rateForm").data('url'),
             data: serializedData,
             type: 'post',
-            success: function(response){
-                console.log(response);
-                $('#myRate').html(response);
+            success: function(data){
+                console.log(data);
+                $('#myRate').html(data);
             }
         })
     });
