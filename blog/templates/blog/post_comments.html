@@ -1,0 +1,6 @@
+
+<h3>Komentarze:</h3>
+        {% for comment in post.comment_set.all %}
+            <p>{{ comment.content }}</p>
+            <small>{{ comment.author }} / {{ comment.date_of_create }}</small>
+        {% endfor %}

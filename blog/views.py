@@ -7,6 +7,7 @@ from comments.forms import CommentForm
 from django.urls import reverse
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.shortcuts import render
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -82,3 +83,8 @@ class PostUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             return True
         else:
             return False
+
+def post_comments(request, id):
+    post = Post.objects.get(id=id)
+    context = {'post': post}
+    return render(request, 'blog/post_comments.html', context)

@@ -8,7 +8,8 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(data){
                 console.log(data);
-                $('.comments').append('<p>' + data.comment.content + '</p><small>' + data.comment.author +  '/' + data.comment.date_of_create + '</small>');
+                console.log(data.comment.post)
+                $('.comments').load("http://127.0.0.1:8000/post_comments/" + data.comment.post);
                 $('textarea').val('');
             }
         })
