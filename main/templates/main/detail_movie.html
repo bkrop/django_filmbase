@@ -7,7 +7,7 @@
     <p>{{ movie.description }}</p>
     <p>{{ movie.date_of_realease }}</p>
     <p>{{ movie.kind }}</p>
-    <p>Ocena: <div id="average">{{ movie.get_average }}</div></p>
+    <p>Ocena:<div id="average">{{ movie.get_average }}</div></p>
     
     {% if user.is_authenticated %}
         <form action="" method="POST" id="rateForm" data-url="{% url 'detail_movie' slug=movie.slug %}">

@@ -14,16 +14,19 @@
             {% else %}
                 <ul><a href="{% url 'register' %}">Zarejestruj się</a></ul>
                 <ul><a href="{% url 'login' %}">Zaloguj się</a></ul>
-            {% endif %}            
-        </div>
-        <div>
+            {% endif %}
+            <div>
             <form action="{% url 'search' %}" method="GET">
                 <input type="text" name="search" placeholder="Szukaj...">
             </form>
+        </div>            
         </div>
+        <div style="margin-left: 10px;">
         {% block content %}
         {% endblock %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" ></script>
         <script src="{% static 'js/rate.js' %}"></script>
+        <script src="{% static 'js/comment.js' %}"></script>
     </body>
 </html>

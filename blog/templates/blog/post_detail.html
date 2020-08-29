@@ -13,15 +13,17 @@
     <p>{{ post.content }}</p>
 
     <h3>Dodaj komentarz:</h3>
-    <form action="" method="POST">
+    <form action="" method="POST" id="commentForm" data-url="{% url 'post_detail' slug=post.slug %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Wyślij</button>
+        <button type="button" id="commentBtn">Wyślij</button>
     </form>
 
-    <h3>Komentarze:</h3>
-    {% for comment in post.comment_set.all %}
-        <p>{{ comment.content }}</p>
-        <small>{{ comment.author }} / {{ comment.date_of_create }}</small>
-    {% endfor %}
+    <div id="comments">
+        <h3>Komentarze:</h3>
+        {% for comment in post.comment_set.all %}
+            <p>{{ comment.content }}</p>
+            <small>{{ comment.author }} / {{ comment.date_of_create }}</small>
+        {% endfor %}
+    </div>
 {% endblock %}

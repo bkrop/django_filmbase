@@ -1,9 +1,12 @@
+from comments.models import Comment
 from .models import Post
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import FormMixin
 from comments.forms import CommentForm
 from django.urls import reverse
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -35,7 +38,13 @@ class PostDetailView(FormMixin, DetailView):
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
-            return self.form_valid(form)
+            if request.method == 'POST':
+                new_comment = Comment.objects.create(
+                    author = self.request.user,
+                    post = self.object,
+                    content = form.cleaned_data['content']
+                )
+                return JsonResponse({'comment': model_to_dict(new_comment)}, status=200)
         else:
             return self.form_invalid(form)
 
