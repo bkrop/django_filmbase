@@ -8,7 +8,7 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(data){
                 console.log(data);
-                $('#comments').html(data['comment']);
+                $('.comments').append('<p>' + data.comment.content + '</p><small>' + data.comment.author +  '/' + data.comment.date_of_create + '</small>');
                 $('textarea').val('');
             }
         })

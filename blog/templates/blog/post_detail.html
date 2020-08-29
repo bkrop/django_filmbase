@@ -19,7 +19,7 @@
         <button type="button" id="commentBtn">Wyślij</button>
     </form>
 
-    <div id="comments">
+    <div class="comments">
         <h3>Komentarze:</h3>
         {% for comment in post.comment_set.all %}
             <p>{{ comment.content }}</p>
