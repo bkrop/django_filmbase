@@ -1,5 +1,7 @@
 {% extends 'users/base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}{{ topic.title }}{% endblock %}
 
 {% block content %}
@@ -15,7 +17,7 @@
     <h3>Dodaj komentarz:</h3>
     <form action="" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy }}
         <button type="submit">Wyślij</button>
     </form>
 

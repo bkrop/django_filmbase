@@ -1,5 +1,7 @@
 {% extends 'users/base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
@@ -15,7 +17,7 @@
     <h3>Dodaj komentarz:</h3>
     <form action="" method="POST" id="commentForm" data-url="{% url 'post_detail' slug=post.slug %}">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy }}
         <button type="button" id="commentBtn">Wyślij</button>
     </form>
 

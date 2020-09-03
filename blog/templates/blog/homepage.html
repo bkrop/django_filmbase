@@ -6,7 +6,7 @@
     {% for post in posts %}
         <div class="container-fluid">
             <h1><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h1>
-            <small>{{ post.author }} / {{ post.date_of_create }}</small>
+            <small>{{ post.author }} / {{ post.date_of_create|date:"d E Y" }}</small>
         </div>        
     {% endfor %}
 {% endblock %}

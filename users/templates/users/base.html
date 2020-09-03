@@ -5,22 +5,6 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     </head>
     <body>
-        <!-- <div>
-            <ul><a href="{% url 'home' %}">FILMBASE</a></ul>
-            {% if user.is_authenticated %}
-                <ul><a href="{% url 'logout' %}">Wyloguj się</a></ul>
-                <ul><a href="{% url 'create_person' %}">Stwórz osobę</a></ul>
-                <ul><a href="{% url 'create_movie' %}">Stwórz film</a></ul>
-            {% else %}
-                <ul><a href="{% url 'register' %}">Zarejestruj się</a></ul>
-                <ul><a href="{% url 'login' %}">Zaloguj się</a></ul>
-            {% endif %}
-            <div>
-            <form action="{% url 'search' %}" method="GET">
-                <input type="text" name="search" placeholder="Szukaj...">
-            </form>
-            </div>            
-        </div> -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="{% url 'home' %}">FILMBASE</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,33 +13,38 @@
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
                 <li class="nav-item active">
-                  <a class="nav-link" href="#">Home</a>
+                  <a class="nav-link" href="{% url 'logout' %}">Wyloguj się</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'register' %}">Zarejestruj się</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
+                  <a class="nav-link" href="{% url 'login' %}">Zaloguj się</a>
                 </li>
+                {% endif %}
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
+                    Baza
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="{% url 'create_person' %}">Stwórz osobę</a>
+                    <a class="dropdown-item" href="{% url 'create_movie' %}">Stwórz film</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="{% url 'list_movie' %}">Ranking filmów</a>
                   </div>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
+                
+                
               </ul>
               <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="GET">
                 <input class="form-control mr-sm-2" type="text" name="search" placeholder="Szukaj...">
               </form>
             </div>
         </nav>
-        <div style="margin-left: 10px;">
+        <div class="container">
         {% block content %}
         {% endblock %}
         </div>
