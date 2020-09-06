@@ -17,6 +17,12 @@ class Topic(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+def slug_generator(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(slug_generator, sender=Topic)
+
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(blank=False, null=False, max_length=500, verbose_name='Treść')
@@ -27,8 +33,9 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-date_of_create']
 
-def slug_generator(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
+class Reply(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField(blank=False, null=False, max_length=500, verbose_name='Treść')
+    date_of_create = models.DateTimeField(default=timezone.now)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 
-pre_save.connect(slug_generator, sender=Topic)

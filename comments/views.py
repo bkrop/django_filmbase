@@ -1,10 +1,11 @@
 from django.views.generic import CreateView, DetailView, RedirectView
-from .models import Topic
+from .models import Comment, Topic, Reply
 from django.shortcuts import reverse
 from main.models import Person, Movie
 from django.db.models import Q
 from django.views.generic.edit import FormMixin
 from .forms import CommentForm
+from django.shortcuts import render
 
 
 class TopicCreateView(CreateView):
@@ -73,5 +74,4 @@ class TopicDetailView(FormMixin, DetailView):
                 'topic_slug': self.object.slug,
                 'slug': self.object.person.slug
                 })
-
 

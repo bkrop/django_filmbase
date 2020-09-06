@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.shortcuts import render
+from comments.models import Reply
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -88,3 +89,9 @@ def post_comments(request, id):
     post = Post.objects.get(id=id)
     context = {'post': post}
     return render(request, 'blog/post_comments.html', context)
+
+def comment_replies(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    replies = Reply.objects.filter(comment=comment)
+    context = {'replies': replies}
+    return render(request, 'blog/comment_replies.html', context)
