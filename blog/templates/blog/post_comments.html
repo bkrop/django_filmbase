@@ -3,7 +3,7 @@
 {% for comment in post.comment_set.all %}
     <p>{{ comment.content }}</p>
     <small>{{ comment.author }} / {{ comment.date_of_create|date:"d E Y" }}</small>
-    <button type="button" id="{{ comment.id }}" class="showReplies" data-href="{% url 'comment_replies' comment.id %}">Pokaż odpowiedzi</button>
+    <button type="button" id="{{ comment.id }}" class="showReplies btn btn-link" data-href="{% url 'comment_replies' comment.id %}">Pokaż odpowiedzi</button>
     <div class="replies" id="{{ comment.id }}" style="margin-left: 30px;">
         {% include 'blog/comment_replies.html' %}
     </div>
