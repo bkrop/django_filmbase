@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.shortcuts import render
 from comments.models import Reply
+from comments.forms import ReplyForm
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -95,3 +96,17 @@ def comment_replies(request, comment_id):
     replies = Reply.objects.filter(comment=comment)
     context = {'replies': replies}
     return render(request, 'blog/comment_replies.html', context)
+
+def post_reply(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if request.method == 'POST':
+        form = ReplyForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.author = request.user
+            reply.comment = comment
+            reply.save()
+    else:
+        form = ReplyForm()
+    context = {'form': form}
+    return render(request, 'blog/post_reply.html', context)
