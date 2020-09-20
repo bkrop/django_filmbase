@@ -29,13 +29,14 @@ class Comment(models.Model):
     date_of_create = models.DateTimeField(default=timezone.now)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True)
+    comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies')
 
     class Meta:
         ordering = ['-date_of_create']
 
-class Reply(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField(blank=False, null=False, max_length=500, verbose_name='Treść')
-    date_of_create = models.DateTimeField(default=timezone.now)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+# class Reply(models.Model):
+#     author = models.ForeignKey(User, on_delete=models.CASCADE)
+#     content = models.TextField(blank=False, null=False, max_length=500, verbose_name='Treść')
+#     date_of_create = models.DateTimeField(default=timezone.now)
+#     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 

@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 
-{% for reply in replies %}
+{% for reply in comment.replies.all %}
     <p>{{ reply.content }}</p>
     <small>{{ reply.author }} / {{ reply.date_of_create|date:"d E Y" }}</small>
 {% endfor %}

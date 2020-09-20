@@ -8,8 +8,8 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.shortcuts import render
-from comments.models import Reply
-from comments.forms import ReplyForm
+# from comments.models import Reply
+# from comments.forms import ReplyForm
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -42,9 +42,15 @@ class PostDetailView(FormMixin, DetailView):
         form = self.get_form()
         if form.is_valid():
             if request.method == 'POST':
+                comment_id = self.request.POST.get('comment_id')
+                if comment_id:
+                    comment = Comment.objects.get(id=comment_id)
+                else:
+                    comment = None
                 new_comment = Comment.objects.create(
                     author = self.request.user,
                     post = self.object,
+                    comment = comment,
                     content = form.cleaned_data['content']
                 )
                 return JsonResponse({'comment': model_to_dict(new_comment)}, status=200)
@@ -93,20 +99,19 @@ def post_comments(request, id):
 
 def comment_replies(request, comment_id):
     comment = Comment.objects.get(id=comment_id)
-    replies = Reply.objects.filter(comment=comment)
-    context = {'replies': replies}
+    context = {'comment': comment}
     return render(request, 'blog/comment_replies.html', context)
 
-def post_reply(request, comment_id):
-    comment = Comment.objects.get(id=comment_id)
-    if request.method == 'POST':
-        form = ReplyForm(request.POST)
-        if form.is_valid():
-            reply = form.save(commit=False)
-            reply.author = request.user
-            reply.comment = comment
-            reply.save()
-    else:
-        form = ReplyForm()
-    context = {'form': form}
-    return render(request, 'blog/post_reply.html', context)
+# def post_reply(request, comment_id):
+#     comment = Comment.objects.get(id=comment_id)
+#     if request.method == 'POST':
+#         reply_form = ReplyForm(request.POST)
+#         if reply_form.is_valid():
+#             reply = reply_form.save(commit=False)
+#             reply.author = request.user
+#             reply.comment = comment
+#             reply.save()
+#     else:
+#         reply_form = ReplyForm()
+#     context = {'reply_form': reply_form}
+#     return render(request, 'blog/post_reply.html', context)

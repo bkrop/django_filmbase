@@ -1,5 +1,5 @@
 from django.views.generic import CreateView, DetailView, RedirectView
-from .models import Comment, Topic, Reply
+from .models import Comment, Topic
 from django.shortcuts import reverse
 from main.models import Person, Movie
 from django.db.models import Q
