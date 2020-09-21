@@ -28,7 +28,7 @@ class Comment(models.Model):
     content = models.TextField(blank=False, null=False, max_length=500, verbose_name='Treść')
     date_of_create = models.DateTimeField(default=timezone.now)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
     comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies')
 
     class Meta:
