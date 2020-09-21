@@ -34,9 +34,4 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-date_of_create']
 
-# class Reply(models.Model):
-#     author = models.ForeignKey(User, on_delete=models.CASCADE)
-#     content = models.TextField(blank=False, null=False, max_length=500, verbose_name='Treść')
-#     date_of_create = models.DateTimeField(default=timezone.now)
-#     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 

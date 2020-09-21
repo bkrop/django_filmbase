@@ -101,17 +101,3 @@ def comment_replies(request, comment_id):
     comment = Comment.objects.get(id=comment_id)
     context = {'comment': comment}
     return render(request, 'blog/comment_replies.html', context)
-
-# def post_reply(request, comment_id):
-#     comment = Comment.objects.get(id=comment_id)
-#     if request.method == 'POST':
-#         reply_form = ReplyForm(request.POST)
-#         if reply_form.is_valid():
-#             reply = reply_form.save(commit=False)
-#             reply.author = request.user
-#             reply.comment = comment
-#             reply.save()
-#     else:
-#         reply_form = ReplyForm()
-#     context = {'reply_form': reply_form}
-#     return render(request, 'blog/post_reply.html', context)
