@@ -6,6 +6,9 @@ from django.db.models import Q
 from django.views.generic.edit import FormMixin
 from .forms import CommentForm
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+from django.forms.models import model_to_dict
+import json
 
 
 class TopicCreateView(CreateView):
@@ -75,3 +78,19 @@ class TopicDetailView(FormMixin, DetailView):
                 'slug': self.object.person.slug
                 })
 
+def like_comment(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    user = request.user
+    like = None
+    if user not in comment.likes.all():
+        comment.likes.add(user)
+        like = True
+    else:
+        comment.likes.remove(user)
+        like = False
+    data = {
+        'user': user.id,
+        'comment': comment.id,
+        'like': like
+    }
+    return HttpResponse(json.dumps(data))

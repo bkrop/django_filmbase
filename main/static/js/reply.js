@@ -11,7 +11,7 @@ $(document).ready(function(){
             success: function(data){
                 console.log(data);
                 console.log(data.comment.post)
-                $('.comments').load("http://127.0.0.1:8000/comment_replies/" + data.comment.post);
+                $('.replies').load("http://127.0.0.1:8000/comment_replies/" + data.comment.comment);
                 $('textarea').val('');
             }
         })

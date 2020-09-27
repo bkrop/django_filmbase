@@ -13,10 +13,16 @@
     <h1>{{ post.title }}</h1>
     <small>Autor: {{ post.author }} / {{ post.date_of_create }}</small>
     <p>{{ post.content }}</p>
-
+    <h3>Dodaj komentarz:</h3>
+    <form action="" method="POST" id="commentForm" data-url="{% url 'post_detail' slug=post.slug %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="button" id="commentBtn">Wyślij</button>
+    </form>
     
 
     <div class="comments">
         {% include 'blog/post_comments.html' %}
     </div>
 {% endblock %}
+

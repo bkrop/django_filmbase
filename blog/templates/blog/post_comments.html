@@ -1,19 +1,17 @@
+{% load static %}
 {% load crispy_forms_tags %}
-
-<h3>Dodaj komentarz:</h3>
-    <form action="" method="POST" id="commentForm" data-url="{% url 'post_detail' slug=post.slug %}">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="button" id="commentBtn">Wyślij</button>
-    </form>
 
 <h3>Komentarze:</h3>
 {% for comment in post.comment_set.all %}
     {% if comment.comment == null %}
         <p>{{ comment.content }}</p>
-        <small>{{ comment.author }} / {{ comment.date_of_create|date:"d E Y" }}</small>
+        <small>{{ comment.author }} / {{ comment.date_of_create|date:"d E Y" }} / Polubienia: {{ comment.likes.all|length }}</small>
         <button type="button" id="{{ comment.id }}" class="showReplies btn btn-link" data-href="{% url 'comment_replies' comment.id %}">Pokaż odpowiedzi</button>
-        <button type="button" id="{{ comment.id }}" class="showForm">Odpowiedz</button>
+        <button type="button" id="{{ comment.id }}" class="showForm btn btn-link">Odpowiedz</button>
+        <form action="{% url 'like_comment' comment_id=comment.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" name="comment_id" value="{{ comment.id }}">Lubię to</button>
+        </form>
         <div class="replies" id="{{ comment.id }}" style="margin-left: 30px; display: none;">
             {% include 'blog/comment_replies.html' %}
         </div>
@@ -28,3 +26,10 @@
         </div>
     {% endif %}
 {% endfor %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" ></script>
+        <script src="{% static 'js/rate.js' %}"></script>
+        <script src="{% static 'js/replies.js' %}"></script>
+        <script src="{% static 'js/reply.js' %}"></script>
+        <script src="{% static 'js/showForm.js' %}"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>

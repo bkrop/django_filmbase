@@ -29,7 +29,8 @@ class Comment(models.Model):
     date_of_create = models.DateTimeField(default=timezone.now)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
-    comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies')
+    comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies', blank=True)
+    likes = models.ManyToManyField(User, related_name='liked_comments')
 
     class Meta:
         ordering = ['-date_of_create']
