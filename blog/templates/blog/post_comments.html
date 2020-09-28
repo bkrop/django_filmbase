@@ -5,12 +5,12 @@
 {% for comment in post.comment_set.all %}
     {% if comment.comment == null %}
         <p>{{ comment.content }}</p>
-        <small>{{ comment.author }} / {{ comment.date_of_create|date:"d E Y" }} / Polubienia: {{ comment.likes.all|length }}</small>
+        <small>{{ comment.author }} / {{ comment.date_of_create|date:"d E Y" }} / Polubienia: <span class="counter" id="{{ comment.id }}">{{ comment.likes.all|length }}</span></small>
         <button type="button" id="{{ comment.id }}" class="showReplies btn btn-link" data-href="{% url 'comment_replies' comment.id %}">Pokaż odpowiedzi</button>
         <button type="button" id="{{ comment.id }}" class="showForm btn btn-link">Odpowiedz</button>
-        <form action="{% url 'like_comment' comment_id=comment.id %}" method="POST">
+        <form action="{% url 'like_comment' comment_id=comment.id %}" class="likeForm" id="{{ comment.id }}">
             {% csrf_token %}
-            <button type="submit" name="comment_id" value="{{ comment.id }}">Lubię to</button>
+            <button type="button" class="likeBtn" id="{{ comment.id }}" data-url="{% url 'like_comment' comment_id=comment.id %}"><i class="far fa-thumbs-up"></i></button>
         </form>
         <div class="replies" id="{{ comment.id }}" style="margin-left: 30px; display: none;">
             {% include 'blog/comment_replies.html' %}
@@ -22,7 +22,7 @@
             <input type="hidden" name="comment_id" value="{{ comment.id }}">
             {{ form|crispy }}
             <button type="button" class="replyBtn" id="{{ comment.id }}">Wyślij</button>
-        </form>
+            </form>
         </div>
     {% endif %}
 {% endfor %}

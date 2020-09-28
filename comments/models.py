@@ -32,6 +32,9 @@ class Comment(models.Model):
     comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies', blank=True)
     likes = models.ManyToManyField(User, related_name='liked_comments')
 
+    def like_counter(self):
+        return self.likes.count()
+
     class Meta:
         ordering = ['-date_of_create']
 
