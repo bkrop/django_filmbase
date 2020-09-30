@@ -2,26 +2,39 @@
 {% load crispy_forms_tags %}
 
 <h3>Komentarze:</h3>
-{% for comment in post.comment_set.all %}
+{% for comment in post.comment_set.all|dictsortreversed:'like_counter' %}
     {% if comment.comment == null %}
         <p>{{ comment.content }}</p>
         <small>{{ comment.author }} / {{ comment.date_of_create|date:"d E Y" }} / Polubienia: <span class="counter" id="{{ comment.id }}">{{ comment.likes.all|length }}</span></small>
-        <button type="button" id="{{ comment.id }}" class="showReplies btn btn-link" data-href="{% url 'comment_replies' comment.id %}">Pokaż odpowiedzi</button>
-        <button type="button" id="{{ comment.id }}" class="showForm btn btn-link">Odpowiedz</button>
         <form action="{% url 'like_comment' comment_id=comment.id %}" class="likeForm" id="{{ comment.id }}">
             {% csrf_token %}
-            <button type="button" class="likeBtn" id="{{ comment.id }}" data-url="{% url 'like_comment' comment_id=comment.id %}"><i class="far fa-thumbs-up"></i></button>
+            <button type="button" class="likeBtn btn" id="{{ comment.id }}" data-url="{% url 'like_comment' comment_id=comment.id %}">
+                {% if request.user not in comment.likes.all %}
+                    <i class="far fa-thumbs-up" id="{{ comment.id }}"></i>
+                {% else %}
+                    <i class="fas fa-thumbs-up" id="{{ comment.id }}"></i>
+                {% endif %}
+            </button>
         </form>
+        <button type="button" id="{{ comment.id }}" class="showReplies btn btn-link" data-href="{% url 'comment_replies' comment.id %}">
+            Pokaż odpowiedzi
+        </button>
+        <button type="button" id="{{ comment.id }}" class="showForm btn btn-link">
+            Odpowiedz
+        </button>
+        
         <div class="replies" id="{{ comment.id }}" style="margin-left: 30px; display: none;">
             {% include 'blog/comment_replies.html' %}
         </div>
         <div id="{{ comment.id }}" style="display: none;" class="replyFormDiv">
             <h3>Dodaj odpowiedź:</h3>
             <form action="" method="POST" id="{{ comment.id }}" class="replyForm" data-url="{% url 'post_detail' slug=post.slug %}">
-            {% csrf_token %}
-            <input type="hidden" name="comment_id" value="{{ comment.id }}">
-            {{ form|crispy }}
-            <button type="button" class="replyBtn" id="{{ comment.id }}">Wyślij</button>
+                {% csrf_token %}
+                <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                {{ form|crispy }}
+                <button type="button" class="replyBtn" id="{{ comment.id }}">
+                    Wyślij
+                </button>
             </form>
         </div>
     {% endif %}

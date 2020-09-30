@@ -92,6 +92,6 @@ def like_comment(request, comment_id):
         'user': user.id,
         'comment': comment.id,
         'like': like,
-        'likes_counter': comment.like_counter()
+        'likes_counter': comment.like_counter(),
     }
     return HttpResponse(json.dumps(data))
