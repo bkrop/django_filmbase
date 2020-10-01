@@ -1,6 +1,20 @@
 {% load crispy_forms_tags %}
+{% load static %}
 
-{% for reply in comment.replies.all %}
+{% for reply in comment.replies.all|dictsortreversed:'like_counter' %}
     <p>{{ reply.content }}</p>
-    <small>{{ reply.author }} / {{ reply.date_of_create|date:"d E Y" }} / Polubienia: {{ reply.likes.all|length }}</small>
+    <small>{{ reply.author }} / {{ reply.date_of_create|date:"d E Y" }} / Polubienia: <span class="counter" id="{{ reply.id }}">{{ reply.likes.all|length }}</span></small>
+    <form action="{% url 'like_comment' comment_id=reply.id %}" class="likeForm" id="{{ reply.id }}">
+        {% csrf_token %}
+        <button type="button" class="likeBtn btn" id="{{ reply.id }}" data-url="{% url 'like_comment' comment_id=reply.id %}">
+            {% if request.user not in reply.likes.all %}
+                <i class="far fa-thumbs-up" id="{{ reply.id }}"></i>
+            {% else %}
+                <i class="fas fa-thumbs-up" id="{{ reply.id }}"></i>
+            {% endif %}
+        </button>
+    </form>
 {% endfor %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" ></script>
+<script src="{% static 'js/comment.js' %}"></script>
